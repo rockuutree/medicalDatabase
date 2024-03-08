@@ -132,22 +132,13 @@ ORDER BY
     S.breed ASC;
 
 
--- Q4: medical conditions in their owners?
-SELECT
-   p.name,
-   p.mental_health AS mental_health,
-   p.physical_health AS phys_health,
-   d.name AS medical_condition,
-   s.breed
-FROM
-   service_animals s
-JOIN
-   patients p ON s.owner_ssn = p.ssn AND s.owner_name = p.name
-JOIN
-   disabilities_diseases d ON p.ssn = d.patient_ssn AND d.patient_name = p.name
-ORDER BY
-   p.mental_health DESC,
-   p.physical_health DESC;
+-- Q4: What diseases/disabilities are the most common that are hereditary across all patients? (Health Practitioner, Policy Maker)
+SELECT type, COUNT(*) as frequency
+FROM disabilities_diseases
+WHERE is_hereditary = TRUE
+GROUP BY type
+ORDER BY frequency DESC;
+
 
 -- Q5: Can we determine which hospitals treat certain disabilities/diseases the most?
 
