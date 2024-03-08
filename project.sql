@@ -1,6 +1,7 @@
 --Q0: the name of the database on the class server in which I can find your schema
 --vurya22_db
 
+-----------------------
 
 -- Q1: a list of CREATE TABLE statements implementing your schema
 drop table if exists disabilities_diseases cascade;
@@ -8,9 +9,6 @@ drop table if exists service_animals cascade;
 drop table if exists treatments cascade;
 drop table if exists hospitals;
 drop table if exists patients;
-
-
-
 
 -- create table patients
 CREATE TABLE patients (
@@ -24,9 +22,6 @@ CREATE TABLE patients (
    PRIMARY KEY (ssn, name)
 );
 
-
-
-
 -- create table hospitals
 CREATE TABLE hospitals (
    hospital_id VARCHAR(7) PRIMARY KEY,
@@ -36,9 +31,6 @@ CREATE TABLE hospitals (
    state CHAR(2),
    zip_code VARCHAR(7)
 );
-
-
-
 
 -- create table treatments
 CREATE TABLE treatments (
@@ -56,9 +48,6 @@ CREATE TABLE treatments (
        ON DELETE CASCADE
 );
 
-
-
-
 -- create table disabilities_diseases
 CREATE TABLE disabilities_diseases (
    name VARCHAR(150),
@@ -72,9 +61,6 @@ CREATE TABLE disabilities_diseases (
        ON UPDATE CASCADE
        ON DELETE CASCADE
 );
-
-
-
 
 -- create table service_animals
 CREATE TABLE service_animals (
@@ -90,6 +76,9 @@ CREATE TABLE service_animals (
        ON UPDATE CASCADE
        ON DELETE CASCADE
 );
+
+
+-------------------------------
 
 --Q2: a list of 10 SQL statements using your schema, along with the English question it implements.
 
@@ -123,24 +112,7 @@ ORDER BY
 LIMIT 1;
 
 
--- Q3: what diseases/disabilities seem to show the least improvement in owners with service animals?
-SELECT
-    dd.type AS disease_disability,
-    AVG(t.scale_of_improvement) AS average_improvement
-FROM
-    disabilities_diseases dd
-JOIN
-    treatments t ON dd.patient_ssn = t.patient_ssn AND dd.patient_name = t.patient_name
-JOIN
-    patients p ON dd.patient_ssn = p.ssn AND dd.patient_name = p.name
-JOIN
-    service_animals sa ON p.ssn = sa.owner_ssn AND p.name = sa.owner_name
-GROUP BY
-    dd.type
-ORDER BY
-    average_improvement ASC;
-
--- Q4: Are there specific breeds of service animals that demonstrate a higher effectiveness in alleviating certain medical conditions in their owners? (Patient, Health Practitioner, Researchers, Service Animal Orgs)
+-- Q3: Are there specific breeds of service animals that demonstrate a higher effectiveness in alleviating certain medical conditions in their owners? (Patient, Health Practitioner, Researchers, Service Animal Orgs)
 SELECT 
     P.name, 
     P.mental_health, 
@@ -160,7 +132,7 @@ ORDER BY
     S.breed ASC;
 
 
--- Q5: medical conditions in their owners?
+-- Q4: medical conditions in their owners?
 SELECT
    p.name,
    p.mental_health AS mental_health,
@@ -177,7 +149,7 @@ ORDER BY
    p.mental_health DESC,
    p.physical_health DESC;
 
--- Q6: Can we determine which hospitals treat certain disabilities/diseases the most?
+-- Q5: Can we determine which hospitals treat certain disabilities/diseases the most?
 
 SELECT
    h.name as hospital_name,
@@ -203,6 +175,23 @@ GROUP BY
    d.name
 ORDER BY
    num_treatments DESC;
+
+-- Q6: what diseases/disabilities seem to show the least improvement in owners with service animals?
+SELECT
+    dd.type AS disease_disability,
+    AVG(t.scale_of_improvement) AS average_improvement
+FROM
+    disabilities_diseases dd
+JOIN
+    treatments t ON dd.patient_ssn = t.patient_ssn AND dd.patient_name = t.patient_name
+JOIN
+    patients p ON dd.patient_ssn = p.ssn AND dd.patient_name = p.name
+JOIN
+    service_animals sa ON p.ssn = sa.owner_ssn AND p.name = sa.owner_name
+GROUP BY
+    dd.type
+ORDER BY
+    average_improvement ASC;
 
 -- Q7: Which hospitals have the most number of patients with service animals?
 SELECT
@@ -268,5 +257,13 @@ JOIN treatments t ON d.patient_ssn = t.patient_ssn AND d.patient_name = t.patien
 WHERE t.date_ended IS NOT NULL
 ORDER BY days_of_treatment ASC, scale_of_improvement DESC;
 
+
+-----------------------------
+
 -- Q3: a list of 3-5 demo queries that return (minimal) sensible results. Please specify the team member responsible for each. These can be a subset of the 10 queries implemented for Q2, in which case it's okay to list them twice.
+
+-- Q4: Are there specific breeds of service animals that demonstrate a higher effectiveness in alleviating certain medical conditions in their owners? (Patient, Health Practitioner, Researchers, Service Animal Orgs)
+
+--------------------
+
 -- Q4: reflection on what you learned and challenges
