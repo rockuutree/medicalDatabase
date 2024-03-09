@@ -125,7 +125,7 @@ LEFT JOIN disabilities_diseases AS D
 	AND P.name = D.patient_name
 LEFT JOIN service_animals AS S 
     ON P.ssn = S.owner_ssn 
-	AND P.name = S.owner_name
+	AND P.name = S.owner_nam
 ORDER BY 
     P.mental_health DESC, 
     P.physical_health DESC, 
